@@ -50,3 +50,40 @@ Jest es usado por Facebook, Stotify, Twitter, Instagram, AirBNB, etc.
 **Recuerda** instalar el preset de babel: `npm install babel-preset-es2015`
 
 **Recuerda:** cabe destacar que Jest es una herramienta que se usa en entorno de desarrollo, por eso es necesario instalarla bajo el flag `--save-dev`
+
+### Creando nuestra primera prueba unitaria
+
+**Nota:** A Marzo de 2021, esto debería quedar así en el archivo package.json:
+
+```json
+{
+  "name": "cursojest2019",
+  "version": "1.0.0",
+  "description": "Pruebas unitarias con jest",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "keywords": [
+    "jest",
+    "pruebas",
+    "unitarias"
+  ],
+  "author": "Miguel Angel Reyes Moreno <miguelreyesmoreno@hotmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.13.13",
+    "@babel/preset-env": "^7.13.12",
+    "babel-jest": "^26.6.3",
+    "babel-polyfill": "^6.26.0",
+    "jest": "^26.6.3"
+  },
+  "dependencies": {
+    "babel-preset-es2015": "^6.24.1"
+  }
+}
+```
+
+Creamos un archivo math.js y haremos 4 funciones, sumar, restar, multiplicar y dividir y a cada una les haremos pruebas unitarias.
+
+Un estándar es crear una carpeta para las pruebas, se llamará `__test__`. Jest identificará esta carpeta y correrá todas las pruebas que vivan ahí.
