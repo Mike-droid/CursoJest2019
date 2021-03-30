@@ -290,3 +290,92 @@ El orden de ejecución de los console log es:
 2. Antes de cada prueba
 3. Después de cada prueba
 4. Después de todas las pruebas
+
+## Testing Asynchronous Code
+
+### Callbacks
+
+Dentro de Jest, usando funciones asíncronas, debemos usar `done`.
+
+```javascript
+export function callbackHell(callback){
+  callback('Hola JS people');
+};
+
+import {callbackHell} from './../callback';
+
+describe('Probando un Callback', () => {
+  test('Callback', done => {
+    function otherCallback(data) {
+      expect(data).toBe('Hola JS people');
+      done();
+    }
+    callbackHell(otherCallback);
+  });
+});
+```
+
+El done es la forma de informarle a jest que se **resolvió la función asíncrona.**
+
+Lo que pasa es que Jest indica que una prueba terminó cuando llega al final de la ejecución. Cuando estamos trabajando con funciones asíncronas uno no sabe realmente cuándo termina la llamada, por lo que el método `done()` que utilizamos le va a indicar a Jest que debe esperar hasta que el callback `done` se haya llamado antes de terminar la prueba.
+
+### Promesas
+
+Axios nos permite hacer peticiones HTTP y nos regresa una promesa. Además tenemos la garantía de que va a funcionar según sea el navegador.
+
+`npm i --save axios` No la guardaremos como depedencia de desarrollo porque es algo que sí necesita el proyecto para funcionar correctamente.
+
+Obtendremos los datos de [La API de Rick y Morty](https://rickandmortyapi.com/api)
+
+**Ojo**: los console.log son solamente para pruebas, no debemos dejar ninguno en nuestros proyectos.
+
+`async` hace que una función automáticamente retorne una promesa.
+
+[Callbacks vs Promises vs Async/Await](http://www.paulomogollon.com/promises-vs-async-await-vs-callbacks-en-javascript-espanol/)
+
+### Reject y resolve
+
+```javascript
+    test('Resuelve un ¡hola!', () => {
+      return expect(Promise.resolve('¡Hola!')).resolves.toBe('¡Hola!');
+    });
+
+    test('Rechaza con un error', () => {
+      return expect(Promise.reject('ERROR')).rejects.toBe('ERROR');
+    });
+
+    test('Rechaza con otro error', () => {
+      return expect(Promise.reject(new Error('Error'))).rejects.toThrow('Error');
+    });
+```
+
+### Async / Await
+
+### Aplicaciones de testing para Async/Await
+
+```javascript
+import axios from 'axios';
+
+export const getDataFromApi = url => axios(url)
+
+import {getDataFromApi} from './../promise';
+
+describe('Probar Async/Await', () => {
+  test('Realizando una petición a una API con un error', async() => {
+    const apiError = 'http://httpstat.us/404';
+    const peticion = getDataFromApi(apiError);
+    await expect(peticion).rejects.toEqual(Error('Request failed with status code 404'));
+  });
+});
+
+  test('Realizando petición con error 500', async () => {
+    const apiError500 = 'http://httpstat.us/500';
+    try {
+      await getDataFromApi(apiError500);
+    } catch (error) {
+      expect(error).toEqual(new Error('Request failed with status code 500'));
+    }
+  });
+```
+
+***Advertencia***: Estas pruebas no nos dan errores, sin embargo, el código es 404 y 500, por lo que está mal y tenemos que solucionarlas.
