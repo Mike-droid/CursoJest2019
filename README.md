@@ -462,3 +462,23 @@ Object {
   "name": "Miguel Reyes",
 }
 ```
+
+## Implementando Jest en diferentes Frameworks
+
+### Preparar proyecto para trabajar con React JS
+
+El comando de `create react app` ya tiene incluido Jest pero solo para probar lo más mínimo. Nuestro trabajo es hacer pruebas a todo lo que
+vamos agregando a nuestro proyecto.
+
+Como buena práctica, hay que recordar que debemos ignorar la carpeta "node_modules" al subir un proyecto a nuestro repositorio.
+Y cuando descargamos un proyecto de un repositorio, el primer comando a utilizar es `npm install`.
+
+### Preparar proyecto para trabajar con Vue JS
+
+Vue también cuenta con Jest. Dentro de `describe`, en el caso de `test` también se puede reemplazar por el alias `it`.
+
+### Preparar todo para trabajar con Express JS
+
+Con Express podemos hacer servidores que nos puedan exponer una API o hacer el backend de una app.
+
+Para correr el servidor en Express usamos `node nombreDelArchivo`
