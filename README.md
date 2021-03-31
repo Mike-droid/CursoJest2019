@@ -379,3 +379,86 @@ describe('Probar Async/Await', () => {
 ```
 
 ***Advertencia***: Estas pruebas no nos dan errores, sin embargo, el código es 404 y 500, por lo que está mal y tenemos que solucionarlas.
+
+## Snapshot Testing
+
+### Haciendo Snapshot Testing
+
+Cuando tenemos una UI en la que tenemos valores que no van a cambiar o cambiarán muy pocas veces, hacemos estas pruebas para verificar los valores que tenemos contra los que estamos recibiendo.
+
+Los snapshots son una herramienta de jest que permiten asegurar la inmutabilidad de los datos.
+
+Estamos simulando hacer una petición.
+
+```javascript
+export const getCharacter = data => ({
+  "id": data.id,
+  "name": data.name,
+  "status": data.status,
+  "gender": data.gender,
+});
+```
+
+```json
+{
+  "id": 1,
+  "name": "Rick Sanchez",
+  "status": "Alive",
+  "species": "Human",
+  "gender": "Male"
+}
+```
+
+```javascript
+import {getCharacter} from './../snapshot';
+import rick from './../rick.json';
+
+describe('Es hora de las instantaneas', () => {
+  test('Snapshot', () => {
+    expect(getCharacter(rick)).toMatchSnapshot();
+  });
+});
+```
+
+Al correr la prueba, Jest creará un folder llamado "`__snapshots__`"
+
+Un archivo se creará dentro del folder:
+
+```javascript
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Es hora de las instantaneas Snapshot 1`] = `
+Object {
+  "gender": "Male",
+  "id": 1,
+  "name": "Rick Sanchez",
+  "status": "Alive",
+}
+`;
+```
+
+### Excepciones Snapshot
+
+Si tenemos un valor que va a cambiar constántemente, podemos hacer que Jest tome esto en cuenta para que no marque errores en las pruebas.
+
+```javascript
+test('Tenemos una excepción dentro del código', () => {
+    const user = {
+      id: Math.floor(Math.random() * 20),
+      name: "Miguel Reyes"
+    }
+    expect(user).toMatchSnapshot({
+      id: expect.any(Number) //*ID tendrá cualquier valor numérico
+    });
+  });
+```
+
+Y el snapshot será algo así:
+
+```javascript
+exports[`Es hora de las instantaneas Tenemos una excepción dentro del código 1`] = `
+Object {
+  "id": Any<Number>,
+  "name": "Miguel Reyes",
+}
+```
